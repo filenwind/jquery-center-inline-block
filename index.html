@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Demo jquery center block</title>
+    <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+    <script type="text/javascript" src='./dist/jquery-center-inline-block.js'></script>
+    <style type="text/css">
+    
+        #container{
+            margin: 0 100px;
+            text-align: center;
+        }
+
+        #container .inline-box{
+            text-align: center;
+            display: inline-block;
+            width: 150px;
+            height: 150px;
+            line-height: 150px;
+            color: white;
+            margin: 20px;
+            background-color: red;
+        }
+        
+    </style>
+</head>
+<body>
+    
+<div id='container'>
+    <div class="inline-box">1</div>
+</div>
+
+<script type="text/javascript">
+
+    var $container = $("#container"),
+        $box = $container.find(".inline-box").eq(0)
+    ;
+    for(var i = 2; i <= 10; i++){
+        $box.clone().html(i).appendTo($container);
+    }
+    
+    $container.centerInlineBlock();
+    
+</script>
+</body>
+</html>
