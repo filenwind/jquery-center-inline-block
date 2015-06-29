@@ -16,12 +16,27 @@ A jquery plugin for center inline block element, and last row align left.
 </script>
 ```
 
-## Options
-* **wrapper** - template for wrap container's contents
-* **targetChildClass** - you can specified target child for count, It's useful when container have some element before childs
-
 ## Installation
 
 ```
 npm install jquery-center-inline-block
+```
+
+
+## Options
+* **wrapper** - template for wrap container's contents
+* **targetChildClass** - you can specified target child for count, It's useful when container have some element before childs
+
+
+## Methods
+
+
+**destroy**
+```
+$('#container').centerInlineBlock('destroy')
+```
+
+**resize** - trigger resize manual
+```
+$('#container').centerInlineBlock('resize')
 ```

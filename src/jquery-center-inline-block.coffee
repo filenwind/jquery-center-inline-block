@@ -18,10 +18,8 @@
     
     CenterInlineBlock = (element, options)->
         @init(element, options)
-        @resize()
         return
     CenterInlineBlock.prototype.init = (element, options)->
-        
         @options = $.extend({}, {
             wrapper:"<div class='#{pluginName}-wrapper' style='margin:0 auto; text-align:left'></div>"
             targetChildClass: null
@@ -30,21 +28,19 @@
         @container = $(element)
         @window = $(window)
         
-        
         @window_width = 0
         @child_width = null
         
         @appendWrapper()
         @initWindowResizeEvent()
+        @resize()
         
     CenterInlineBlock.prototype.appendWrapper = ()->
         @wrapper = $(@options.wrapper)
         @container.contents().appendTo(@wrapper)
         @container.append(@wrapper)
-        
     
     CenterInlineBlock.prototype.initWindowResizeEvent = ()->
-        
         @resizeID = @window.data("#{pluginName}-resize-id")
         if(!@resizeID)
             @resizeID = 0
@@ -60,8 +56,8 @@
             
             clearTimeout(@resizeTimeout)
             @resizeTimeout = setTimeout(@resize.bind(@))
+            
     CenterInlineBlock.prototype.resize = ()->
-        
         if(@container.is(':visible'))
             @wrapper.contents().each(()->
                 if(@nodeType is 3 and !$.trim(@nodeValue))
@@ -91,29 +87,30 @@
                 if(@wrapper.width() isnt new_width)
                     @wrapper.width(new_width)
                 
-                
-            
     CenterInlineBlock.prototype.destroy = ()->
         @unbindWindowResize()
+        @removeWrapper()
         @container.data(pluginName, null)
+        
+    CenterInlineBlock.prototype.removeWrapper = ()->
+        @wrapper.contents().unwrap()
         
     CenterInlineBlock.prototype.unbindWindowResize = ()->
         @window.unbind("resize.#{pluginName}-#{@resizeID}")
-        
+                
     Plugin = (option)->
-        
         @each(()->
             
-            $this = $(this)
+            $this = $(@)
             data = $this.data(pluginName)
-            
-            if(data)
-                if(typeof option == 'string')
-                    data[option]()
+            if(data and typeof option is 'string')
+                data[option]()
+            else if(data)
+                data.resize()
             else if(!/destroy/.test(option))
                 options = if typeof option is 'object' then option else {}
-                $this.data(pluginName, new CenterInlineBlock(this, options))
-            
+                data = new CenterInlineBlock(@, options)
+                $this.data(pluginName, data)
         )
     
     $.fn.centerInlineBlock = Plugin

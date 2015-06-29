@@ -15,7 +15,6 @@
   pluginName = 'jquery-center-inline-block';
   CenterInlineBlock = function(element, options) {
     this.init(element, options);
-    this.resize();
   };
   CenterInlineBlock.prototype.init = function(element, options) {
     this.options = $.extend({}, {
@@ -27,7 +26,8 @@
     this.window_width = 0;
     this.child_width = null;
     this.appendWrapper();
-    return this.initWindowResizeEvent();
+    this.initWindowResizeEvent();
+    return this.resize();
   };
   CenterInlineBlock.prototype.appendWrapper = function() {
     this.wrapper = $(this.options.wrapper);
@@ -85,7 +85,11 @@
   };
   CenterInlineBlock.prototype.destroy = function() {
     this.unbindWindowResize();
+    this.removeWrapper();
     return this.container.data(pluginName, null);
+  };
+  CenterInlineBlock.prototype.removeWrapper = function() {
+    return this.wrapper.contents().unwrap();
   };
   CenterInlineBlock.prototype.unbindWindowResize = function() {
     return this.window.unbind("resize." + pluginName + "-" + this.resizeID);
@@ -95,13 +99,14 @@
       var $this, data, options;
       $this = $(this);
       data = $this.data(pluginName);
-      if (data) {
-        if (typeof option === 'string') {
-          return data[option]();
-        }
+      if (data && typeof option === 'string') {
+        return data[option]();
+      } else if (data) {
+        return data.resize();
       } else if (!/destroy/.test(option)) {
         options = typeof option === 'object' ? option : {};
-        return $this.data(pluginName, new CenterInlineBlock(this, options));
+        data = new CenterInlineBlock(this, options);
+        return $this.data(pluginName, data);
       }
     });
   };
