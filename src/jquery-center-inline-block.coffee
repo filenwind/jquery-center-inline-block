@@ -24,6 +24,7 @@
         
         @options = $.extend({}, {
             wrapper:"<div class='#{pluginName}-wrapper' style='margin:0 auto; text-align:left'></div>"
+            targetChildClass: null
         }, options)
         
         @container = $(element)
@@ -70,11 +71,16 @@
             if(@child_width is null)
                 @child_width = 0
                 _this = @
-                @wrapper.children().each((i)->
+                
+                if(@options.targetChildClass is null)
+                    $childs = @wrapper.children()
+                else
+                    $childs = @wrapper.find(".#{@options.targetChildClass}")
+            
+                $childs.each((i)->
                     _this.child_width = $(@).outerWidth(true)
                     return false
                 )
-            
             
             if(@child_width > 0)
                 capacity = Math.floor(@container.width() / @child_width)

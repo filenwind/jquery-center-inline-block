@@ -19,7 +19,8 @@
   };
   CenterInlineBlock.prototype.init = function(element, options) {
     this.options = $.extend({}, {
-      wrapper: "<div class='" + pluginName + "-wrapper' style='margin:0 auto; text-align:left'></div>"
+      wrapper: "<div class='" + pluginName + "-wrapper' style='margin:0 auto; text-align:left'></div>",
+      targetChildClass: null
     }, options);
     this.container = $(element);
     this.window = $(window);
@@ -50,7 +51,7 @@
     }
   };
   CenterInlineBlock.prototype.resize = function() {
-    var _this, capacity, new_width;
+    var $childs, _this, capacity, new_width;
     if (this.container.is(':visible')) {
       this.wrapper.contents().each(function() {
         if (this.nodeType === 3 && !$.trim(this.nodeValue)) {
@@ -60,7 +61,12 @@
       if (this.child_width === null) {
         this.child_width = 0;
         _this = this;
-        this.wrapper.children().each(function(i) {
+        if (this.options.targetChildClass === null) {
+          $childs = this.wrapper.children();
+        } else {
+          $childs = this.wrapper.find("." + this.options.targetChildClass);
+        }
+        $childs.each(function(i) {
           _this.child_width = $(this).outerWidth(true);
           return false;
         });

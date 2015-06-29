@@ -6,41 +6,62 @@
     <script type="text/javascript" src='./dist/jquery-center-inline-block.js'></script>
     <style type="text/css">
     
-        #container{
+        .container{
             margin: 0 100px;
             text-align: center;
         }
 
-        #container .inline-box{
+        .container .inline-box{
             text-align: center;
             display: inline-block;
-            width: 150px;
-            height: 150px;
-            line-height: 150px;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
             color: white;
             margin: 20px;
             background-color: red;
+        }
+        
+        .container2 .inline-box{
+            background-color: purple;
+        }
+        
+        .container3 .inline-box{
+            background-color: gray;
         }
         
     </style>
 </head>
 <body>
     
-<div id='container'>
+<div class='container container1'>
+    <div class="inline-box">1</div>
+</div>
+
+<div class='container container2'>
+    <div class="inline-box">1</div>
+</div>
+
+<div class='container container3'>
+    <h2 class="header">Header3</h2>
     <div class="inline-box">1</div>
 </div>
 
 <script type="text/javascript">
 
-    var $container = $("#container"),
-        $box = $container.find(".inline-box").eq(0)
+    var $containers = $(".container"),
+        $box = $containers.find(".inline-box").eq(0)
     ;
-    for(var i = 2; i <= 10; i++){
-        $box.clone().html(i).appendTo($container);
+    for(var i = 2; i <= 20; i++){
+        $box.clone().html(i).appendTo($containers);
     }
     
-    $container.centerInlineBlock();
+    $(".container2").centerInlineBlock();
     
+    $(".container3").centerInlineBlock({
+        targetChildClass: 'inline-box'
+    });
+        
 </script>
 </body>
 </html>
