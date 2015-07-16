@@ -19,7 +19,9 @@
   CenterInlineBlock.prototype.init = function(element, options) {
     this.options = $.extend({}, {
       wrapper: "<div class='" + pluginName + "-wrapper' style='margin:0 auto; text-align:left'></div>",
-      targetChildClass: null
+      targetChildClass: null,
+      targetChildSelector: null,
+      minChildWidth: null
     }, options);
     this.container = $(element);
     this.window = $(window);
@@ -51,7 +53,7 @@
     }
   };
   CenterInlineBlock.prototype.resize = function() {
-    var $childs, _this, capacity, new_width;
+    var capacity, new_width;
     if (this.container.is(':visible')) {
       this.wrapper.contents().each(function() {
         if (this.nodeType === 3 && !$.trim(this.nodeValue)) {
@@ -59,19 +61,9 @@
         }
       });
       if (this.child_width === null) {
-        this.child_width = 0;
-        _this = this;
-        if (this.options.targetChildClass === null) {
-          $childs = this.wrapper.children();
-        } else {
-          $childs = this.wrapper.find("." + this.options.targetChildClass);
-        }
-        $childs.each(function(i) {
-          _this.child_width = $(this).outerWidth(true);
-          return false;
-        });
+        this.initChildWidth();
       }
-      if (this.child_width > 0) {
+      if (this.child_width !== null && this.child_width > 0) {
         capacity = Math.floor(this.container.width() / this.child_width);
         if (capacity < 1) {
           capacity = 1;
@@ -81,6 +73,24 @@
           return this.wrapper.width(new_width);
         }
       }
+    }
+  };
+  CenterInlineBlock.prototype.initChildWidth = function() {
+    var $childs;
+    if (this.options.targetChildClass !== null) {
+      $childs = this.wrapper.find("." + this.options.targetChildClass);
+    } else if (this.options.targetChildSelector !== null) {
+      $childs = this.wrapper.find(this.options.targetChildSelector);
+    } else {
+      $childs = this.wrapper.children();
+    }
+    if ($childs.size()) {
+      this.child_width = $childs.eq(0).outerWidth(true);
+    }
+    if (this.options.minChildWidth === null) {
+
+    } else if (this.child_width === null || this.child_width < this.options.minChildWidth) {
+      return this.child_width = this.options.minChildWidth;
     }
   };
   CenterInlineBlock.prototype.destroy = function() {

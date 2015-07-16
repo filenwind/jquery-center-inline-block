@@ -1,6 +1,6 @@
 {
   "name": "jquery-center-inline-block",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "A jquery plugin for center inline block element, and last row align left.",
   "main": "dist/jquery-center-inline-block.js",
   "scripts": {

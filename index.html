@@ -34,26 +34,30 @@
 </head>
 <body>
     
-<div class='container container1'>
-    <div class="inline-box">1</div>
-</div>
+<div class='container container1'></div>
 
-<div class='container container2'>
-    <div class="inline-box">1</div>
-</div>
+<div class='container container2'></div>
 
 <div class='container container3'>
-    <h2 class="header">Header3</h2>
-    <div class="inline-box">1</div>
+    <h2 class="header">Child by class</h2>
 </div>
+
+<div class='container container4'>
+    <h2 class="header">Child by selector</h2>
+</div>
+
+<div class='container container5'>
+    <h2 class="header">Empty child</h2>
+</div>
+
+
 
 <script type="text/javascript">
 
-    var $containers = $(".container"),
-        $box = $containers.find(".inline-box").eq(0)
-    ;
-    for(var i = 2; i <= 20; i++){
-        $box.clone().html(i).appendTo($containers);
+    var $containers = $(".container").not('.container5');
+    
+    for(var i = 1; i <= 20; i++){
+        $('<div class="inline-box"></div>').html(i).appendTo($containers);
     }
     
     $(".container2").centerInlineBlock();
@@ -61,7 +65,17 @@
     $(".container3").centerInlineBlock({
         targetChildClass: 'inline-box'
     });
-        
+       
+    $(".container4").centerInlineBlock({
+        targetChildSelector: '.inline-box'
+    });
+    
+    $(".container5").centerInlineBlock({
+        'minChildWidth': $('.inline-box').outerWidth(true),
+        targetChildClass: 'inline-box'
+    });
+
+ 
 </script>
 </body>
 </html>

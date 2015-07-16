@@ -25,7 +25,9 @@ npm install jquery-center-inline-block
 
 ## Options
 * **wrapper** - template for wrap container's contents
-* **targetChildClass** - you can specified target child for count, It's useful when container have some element before childs
+* **targetChildClass** - you can specified target child by class for count, It's useful when container have some element before childs
+* **targetChildSelector** - you can specified target child by selector for count, It's useful when container have some element before childs
+* **minChildWidth** - you can specified a min width if child is empty
 
 
 ## Methods

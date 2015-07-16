@@ -23,6 +23,8 @@
         @options = $.extend({}, {
             wrapper:"<div class='#{pluginName}-wrapper' style='margin:0 auto; text-align:left'></div>"
             targetChildClass: null
+            targetChildSelector: null
+            minChildWidth: null
         }, options)
         
         @container = $(element)
@@ -64,21 +66,11 @@
                     $(@).remove()
             )
             
+            
             if(@child_width is null)
-                @child_width = 0
-                _this = @
+                @initChildWidth()
                 
-                if(@options.targetChildClass is null)
-                    $childs = @wrapper.children()
-                else
-                    $childs = @wrapper.find(".#{@options.targetChildClass}")
-            
-                $childs.each((i)->
-                    _this.child_width = $(@).outerWidth(true)
-                    return false
-                )
-            
-            if(@child_width > 0)
+            if(@child_width isnt null and @child_width > 0)
                 capacity = Math.floor(@container.width() / @child_width)
                 if(capacity < 1)
                     capacity = 1
@@ -86,7 +78,26 @@
                 new_width = capacity*@child_width
                 if(@wrapper.width() isnt new_width)
                     @wrapper.width(new_width)
-                
+                    
+    CenterInlineBlock.prototype.initChildWidth = ()->
+        
+        if(@options.targetChildClass isnt null)
+            $childs = @wrapper.find(".#{@options.targetChildClass}")
+        else if(@options.targetChildSelector isnt null)
+            $childs = @wrapper.find(@options.targetChildSelector)
+        else
+            $childs = @wrapper.children()
+        
+        
+        if($childs.size())
+            @child_width = $childs.eq(0).outerWidth(true)
+        
+        
+        if(@options.minChildWidth is null)
+        else if(@child_width is null or @child_width < @options.minChildWidth)
+            @child_width = @options.minChildWidth
+        
+        
     CenterInlineBlock.prototype.destroy = ()->
         @unbindWindowResize()
         @removeWrapper()
